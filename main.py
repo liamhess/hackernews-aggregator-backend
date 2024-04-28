@@ -1,24 +1,27 @@
+from multiprocessing import Process
 import api
-import asyncio
 import schedule
 import time
+from cronjob.cronjob import Cronjob
 
-async def start_api():
+def start_api():
     import uvicorn
     uvicorn.run("api.api:app", host="0.0.0.0", port=3000, reload=True)
     
-def job():
-    print("hehehe")
-    
-async def schedule_something():
-    schedule.every(5).seconds.do(job)
+def schedule_something():
+    schedule.every().day.at("10:30").do(Cronjob().hackernews_to_mail_flow)
     while True:
         schedule.run_pending()
         time.sleep(1)
 
-async def main():
-    start_api()
-    schedule_something()
+def main():
+    p1 = Process(target=schedule_something)
+    p1.start()
+    p2 = Process(target=start_api)
+    p2.start()
+    p1.join()
+    p2.join()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    Cronjob().hackernews_to_mail_flow(daily_flow = False)
+#     main()
