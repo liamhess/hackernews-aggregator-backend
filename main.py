@@ -9,7 +9,7 @@ def start_api():
     uvicorn.run("api.api:app", host="0.0.0.0", port=3000, reload=True)
     
 def schedule_something():
-    schedule.every().day.at("10:30").do(Cronjob().hackernews_to_mail_flow)
+    schedule.every().day.at("08:00").do(Cronjob().hackernews_to_mail_flow)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -23,5 +23,4 @@ def main():
     p2.join()
 
 if __name__ == "__main__":
-    Cronjob().hackernews_to_mail_flow(daily_flow = False)
-#     main()
+    main()

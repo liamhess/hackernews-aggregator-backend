@@ -23,7 +23,7 @@ async def subscribe(item: SubscriptionRequest):
     Cronjob().hackernews_to_mail_flow(daily_flow = False, user_list = [item.email])
     return None
 
-@app.get("/unsubscribe", status_code=204)
+@app.post("/unsubscribe", status_code=204)
 async def subscribe(item: UnsubscriptionRequest):
     backend.remove_user(item.email)
     return None
