@@ -102,7 +102,12 @@ class PostgresController():
               interest_id
               from users_interests
             )
-            and articles.inserted_at > now() - interval '24 hours'
+            and articles.inserted_at::date = (
+              select articles.inserted_at::date
+              from articles
+              order by inserted_at desc
+              limit 1
+            )
             order by cosine_similarity desc;"""
             cur.execute(insert_query)
             self.conn.commit()
