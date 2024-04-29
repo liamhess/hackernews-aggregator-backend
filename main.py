@@ -24,3 +24,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+#     Cronjob().hackernews_to_mail_flow(user_list = ["liam.m.hess@gmail.com", "liam.hess38@icloud.com"])
