@@ -98,7 +98,7 @@ class Cronjob():
         message = Mail(
             from_email="hackernews-aggregator@liamhess.de",
             to_emails=email,
-            subject="First Test",
+            subject="Daily Hacker News",
             plain_text_content="nice, it works",
             html_content=formatted_mail
         )
