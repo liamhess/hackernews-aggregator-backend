@@ -26,11 +26,22 @@ class Cronjob():
     def _get_hackernews_articles(self):
         timestamp_24h_ago = int(time.time() - 86400)
         url = "http://hn.algolia.com/api/v1/search"
-        querystring = {"tags":"front_page,(story,show_hn,ask_hn)","hitsPerPage":"30","numericFilters":f"created_at_i>{timestamp_24h_ago}"}
+        querystring = {"tags":"(story,show_hn,ask_hn)","hitsPerPage":"1000","numericFilters":f"created_at_i>{timestamp_24h_ago},points>5"}
         
         response = requests.get(url, params=querystring)
         hits = response.json()["hits"]
-        parsed_response = [{"article_id": int(x["story_id"]), "headline": x["_highlightResult"]["title"]["value"], "points": x["points"], "website_url": x["_highlightResult"]["url"]["value"]}  for x in hits]
+#         parsed_response = [{"article_id": int(x["story_id"]), "headline": x["_highlightResult"]["title"]["value"], "points": x["points"], "website_url": x["_highlightResult"]["url"]["value"]}  for x in hits]
+        parsed_response = []
+    
+        for article in hits:
+            # put try catch block again
+            parsed_article = {"article_id": int(article["story_id"]), "headline": article["_highlightResult"]["title"]["value"], "points": article["points"]}
+            if "ask_hn" in article["_tags"]:
+                parsed_article["website_url"] = f"https://news.ycombinator.com/item?id={parsed_article['article_id']}"
+            else:
+                parsed_article["website_url"] = article["_highlightResult"]["url"]["value"]
+            parsed_response.append(parsed_article)
+            
         articles = self._embed_headlines(parsed_response)
         self.pg.insert_articles(articles)
         
