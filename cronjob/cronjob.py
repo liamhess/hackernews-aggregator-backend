@@ -36,10 +36,10 @@ class Cronjob():
         for article in hits:
             # put try catch block again
             parsed_article = {"article_id": int(article["story_id"]), "headline": article["_highlightResult"]["title"]["value"], "points": article["points"]}
-            if "ask_hn" in article["_tags"]:
-                parsed_article["website_url"] = f"https://news.ycombinator.com/item?id={parsed_article['article_id']}"
-            else:
+            try:
                 parsed_article["website_url"] = article["_highlightResult"]["url"]["value"]
+            except KeyError:
+                parsed_article["website_url"] = f"https://news.ycombinator.com/item?id={parsed_article['article_id']}"
             parsed_response.append(parsed_article)
             
         articles = self._embed_headlines(parsed_response)
