@@ -43,4 +43,3 @@ if __name__ == "__main__":
     postgres_password = os.environ.get("POSTGRES_PASSWORD")
     openai_api_key = os.environ.get("OPENAI_API_KEY")
     backend = BackendLogic(openai_api_key, postgres_password)
-    backend.add_user("mail2@liamhess.de", "hardware, cybersec, software engineering")
