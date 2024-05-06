@@ -1,3 +1,5 @@
+import logging
+logger = logging.getLogger(__name__)
 import requests
 from typing import List, Union, Dict
 from openai import OpenAI
@@ -5,7 +7,7 @@ import os
 import time
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from postgres_controller import PostgresController
+from postgres_controller.postgres_controller import PostgresController
 from string import Template
 
 class Cronjob():
@@ -46,7 +48,7 @@ class Cronjob():
         self.pg.insert_articles(articles)
         
     def _format_email(self,articles):
-        with open("cronjob/mail_template.html") as f:
+        with open("/home/user/app/src/cronjob/mail_template.html") as f:
             html_template = Template(f.read())
         
         generated_html = html_template.substitute(
@@ -117,16 +119,21 @@ class Cronjob():
         response = sg.send(message)
         
     def hackernews_to_mail_flow(self, daily_flow: bool = True, user_list: List[str] = None):
+        logger.info("Starting hackernews_to_mail_flow")
         if daily_flow:
             self._get_hackernews_articles()
         
+        logger.info("Creating ranking table")
         self.pg.create_articles_ranking_table()
         
         if not user_list:
+            logger.info("Getting users")
             user_list = self.pg.get_all_users()
         
         for user in user_list:
+            logger.info(f"Getting articles for {user}")
             articles = self.pg.get_articles_for_user(user)
+            logger.info(f"Sending mail to {user}")
             self._send_mail(user, articles)
         
 if __name__ == "__main__":

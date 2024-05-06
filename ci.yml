@@ -1,0 +1,7 @@
+prepare:
+  steps: []
+test:
+  steps: []
+run:
+  steps:
+    - command: /home/user/app/.venv/bin/python /home/user/app/src/main.py

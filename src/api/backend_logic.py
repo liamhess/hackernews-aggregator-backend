@@ -1,6 +1,8 @@
+import logging
+logger = logging.getLogger(__name__)
 from openai import OpenAI
 from typing import List, Dict, Union, Tuple
-from postgres_controller import PostgresController
+from postgres_controller.postgres_controller import PostgresController
 from itertools import repeat
 
 class BackendLogic():
