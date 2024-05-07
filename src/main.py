@@ -23,8 +23,12 @@ def start_api():
     import uvicorn
     uvicorn.run("api.api:app", host="0.0.0.0", port=3000, reload=False)
     
+def run_cronjob():
+    c = Cronjob()
+    c.hackernews_to_mail_flow()
+    
 def schedule_something():
-    schedule.every().day.at("06:00").do(Cronjob().hackernews_to_mail_flow)
+    schedule.every().day.at("06:11").do(run_cronjob)
     while True:
         try:
             schedule.run_pending()
