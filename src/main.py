@@ -28,7 +28,7 @@ def run_cronjob():
     c.hackernews_to_mail_flow()
     
 def schedule_something():
-    schedule.every().day.at("06:11").do(run_cronjob)
+    schedule.every().day.at("06:00").do(run_cronjob)
     while True:
         try:
             schedule.run_pending()
