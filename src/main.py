@@ -8,7 +8,7 @@ import time
 from datetime import datetime
 from cronjob.cronjob import Cronjob
 
-def setup_logging():
+def setup_logging() -> None:
     config_path = "./config/logging.ini"
     
     timestamp = datetime.now().strftime("%Y%m%d-%H:%M:%S")
@@ -19,7 +19,7 @@ def setup_logging():
         defaults={"logfilename": os.path.join("./logs", f"{timestamp}.log")},
     )
 
-def start_api():
+def start_api() -> None:
     import uvicorn
     uvicorn.run("api.api:app", host="0.0.0.0", port=3000, reload=False)
     
